@@ -1,0 +1,191 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+a {
+  text-decoration: none;
+}
+body {
+  font-family: "Inter", sans-serif;
+}
+.app_container {
+  padding-top: 70px;
+}
+.header {
+  height: 70px;
+  background-color: #fcc91b !important;
+}
+.header_container {
+  height: 100%;
+  padding-block: 10px;
+}
+.header__inner-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo img {
+  width: 80px;
+  height: auto;
+  mix-blend-mode: color;
+}
+.navbar {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.navbar .nav_items {
+  margin-block: 15px;
+  font-size: 18px;
+  font-weight: 500;
+}
+.navbar .nav_items .nav_link {
+  color: #000;
+  text-decoration: none;
+  transition: all 0.3s;
+  position: relative;
+}
+.navbar .nav_items .nav_link:hover {
+  color: #fff;
+}
+.navbar .nav_items .nav_link:focus {
+  color: #fff;
+}
+
+.navbar .nav_items .nav_link::after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  border: 2px solid transparent;
+  bottom: -30px;
+  left: 0px;
+  transition: all 0.4s;
+}
+.navbar .nav_items .nav_link:focus:after {
+  border: 2px solid white;
+  bottom: -10px;
+}
+.app_routes {
+  width: 100%;
+  margin-left: 15px;
+  padding-top: 30px;
+}
+
+.register_container {
+  height: 100vh;
+  display: flex;
+  padding-block: 30px;
+  background-color: #fcc91b;
+}
+.register__innercontainer {
+  max-width: 450px;
+  margin: auto;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  overflow: hidden;
+}
+.register__box .register_img {
+  width: 250px;
+  height: 250px;
+  margin: auto;
+}
+.register__box {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  flex-direction: column !important;
+  padding-inline: 20px;
+  height: 100%;
+  padding-block: 30px;
+}
+.register_heading {
+  text-align: center;
+  font-size: 45px;
+  color: #fce0a2;
+  text-transform: uppercase;
+}
+.inputs_form .input__fields {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.form_btn_box {
+  text-align: center;
+}
+.form_btn_box .form_btn {
+  background-color: #fcc91b !important;
+  width: 70%;
+  height: 44px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.register__infotext {
+  margin-top: 15px;
+  text-align: center;
+}
+.register__infotext a {
+  color: #fce0a2;
+}
+.signup_container .register__innercontainer {
+  max-width: 800px;
+  height: 600px;
+}
+.signup_container .register_img-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.swiper__container {
+  height: calc(100vh - 100px);
+  position: relative;
+}
+.swiper_img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.swiper__container .swiper__data {
+  position: absolute;
+  width: 100%;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+.swiper__data .swiper_heading {
+  font-size: 48px;
+  font-weight: 700;
+  text-transform: capitalize;
+  color: white;
+}
+.swiper__data .swiper_text {
+  color: white;
+  font-size: 18px;
+  margin-top: 15px;
+}
+.swiper__data .swiper_quotes {
+  margin-top: 30px;
+  color: #fff;
+  font-size: 20px;
+}
+.swiper_quotes .swiper_quote_person {
+  font-weight: 700;
+}
+.mySwiper .swiper-button-prev:after,
+.swiper-rtl .swiper-button-next:after,
+.mySwiper .swiper-button-next:after,
+.swiper-rtl .swiper-button-prev:after {
+  color: white;
+}
+.volunteer_img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+.avatar {
+  width: 40px;
+  height: 40px;
+}
