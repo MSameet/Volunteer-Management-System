@@ -1,5 +1,5 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
-import axios from "axios";
+import { Axios } from "../../Axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { VolunteerCard } from "../pages-components/VolunteerCard";
@@ -7,8 +7,7 @@ import { VolunteerCard } from "../pages-components/VolunteerCard";
 export const Volunteers = () => {
   const [volunteers, setVolunteers] = useState();
   function fetchVolunteers() {
-    axios
-      .get("http://localhost:2000/user/volunteers")
+    Axios.get("/user/volunteers")
       .then((res) => {
         setVolunteers(res.data);
       })

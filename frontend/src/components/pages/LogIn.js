@@ -34,8 +34,11 @@ export const LogIn = () => {
         dispatch(login(res.data));
         window.localStorage.setItem("user", JSON.stringify(res?.data?.user));
         window.localStorage.setItem("token", res?.data?.token);
-        if (res.data.token) {
+        if (res.data.token && res?.data?.user?.role == "Volunteer") {
           navigate("/");
+        }
+        if (res?.data?.user?.role == "admin") {
+          navigate("/admin");
         }
       })
       .catch((err) => console.log(err));

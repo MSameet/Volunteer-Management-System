@@ -2,7 +2,7 @@ import { Container } from "@mui/material";
 import React from "react";
 import { Navbar } from "../base/Navbar";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper";
+import { Autoplay, Navigation, Pagination } from "swiper";
 
 import { SwiperData } from "../../data/home";
 import banner from "../../assets/i/banner.png";
@@ -12,11 +12,11 @@ export const Home = () => {
     <div className="app_container">
       <Navbar />
       <Swiper
-        modules={[Navigation]}
+        modules={[Autoplay]}
         cssMode={true}
-        spaceBetween={50}
+        spaceBetween={0}
         slidesPerView={1}
-        navigation={true}
+        autoplay={true}
         className="mySwiper"
       >
         {SwiperData?.map((data, i) => (

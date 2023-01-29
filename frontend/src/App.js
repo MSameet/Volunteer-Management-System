@@ -11,9 +11,9 @@ import "swiper/css/scrollbar";
 
 function App() {
   return (
-    <Router>
+    <>
       <AppRoutes />
-    </Router>
+    </>
   );
 }
 

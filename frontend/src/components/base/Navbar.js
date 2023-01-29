@@ -44,6 +44,13 @@ export const Navbar = () => {
                 Volunteers
               </Link>
             </li>
+            {user && user.role == "Volunteer" && (
+              <li className="nav_items">
+                <Link to="/profile" className="nav_link">
+                  Profile
+                </Link>
+              </li>
+            )}
 
             <li className="nav_items">
               {user?.role == "admin" ? (
