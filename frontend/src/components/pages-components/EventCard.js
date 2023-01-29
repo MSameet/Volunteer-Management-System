@@ -20,10 +20,17 @@ export const EventCard = (event) => {
         <Typography gutterBottom variant="h5" component="div">
           {event.title}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          className="event-Card_des"
+        >
           {event.description}
         </Typography>
       </CardContent>
+      <CardActions>
+        <Button variant="text">Volunteer</Button>
+      </CardActions>
     </Card>
   );
 };

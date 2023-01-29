@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import {
   Box,
   Button,
+  FormControl,
   FormControlLabel,
   Grid,
+  InputLabel,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
   TextField,
 } from "@mui/material";
 import volunteers from "../../assets/i/user-male.png";
@@ -88,6 +92,18 @@ export const Signup = () => {
               className="input__fields"
               onChange={(e) => setPassword(e.target.value)}
             />
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Role</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                // value={age}
+                label="Role"
+              >
+                <MenuItem value={"Volunteer"}>Volunteer</MenuItem>
+                <MenuItem value={"Admin"}>Admin</MenuItem>
+              </Select>
+            </FormControl>
             <Box sx={{ marginBlock: "20px" }}>
               <FileBase
                 type="file"

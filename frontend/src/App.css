@@ -11,9 +11,9 @@ a {
 body {
   font-family: "Inter", sans-serif;
 }
-/* .app_container {
+.app_container {
   padding-top: 70px;
-} */
+}
 .header {
   height: 70px;
   background-color: #fcc91b !important;
@@ -76,7 +76,7 @@ body {
 }
 
 .register_container {
-  height: 100vh;
+  height: calc(100vh - 70px);
   display: flex;
   padding-block: 30px;
   background-color: #fcc91b;
@@ -204,6 +204,19 @@ body {
   font-size: 50px;
   letter-spacing: 10px;
 }
-.profile_container {
+/* .profile_container {
   padding-top: 70px;
+} */
+.text__center {
+  text-align: center;
+}
+.profile__img {
+  width: 300px;
+  height: 300px;
+}
+.event-Card_des {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
