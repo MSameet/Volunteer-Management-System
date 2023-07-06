@@ -87,6 +87,19 @@ const volunteerRating = async (req, res) => {
   }
 };
 
+// get top volunteer
+
+const getTopVolunteer = async (req, res) => {
+  try {
+    const volunteers = await User.find({ rating: { $gt: 0 } })
+      .sort({ rating: -1 })
+      .limit(10);
+    res.status(201).send({ volunteers });
+  } catch (error) {
+    res.status(404).send({ error });
+  }
+};
+
 module.exports = {
   // getUserInEvent,
   // addUserInEvent,
@@ -98,4 +111,5 @@ module.exports = {
   getVolunteers,
   adminLogin,
   volunteerRating,
+  getTopVolunteer,
 };

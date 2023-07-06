@@ -4,35 +4,20 @@ const sharp = require("sharp");
 
 const getEvents = async (req, res) => {
   try {
-    if (req.user.role == "Admin") {
-      const events = await Event.find({ owner: req.user._id });
-      if (events) {
-        res.status(200).send(events);
-      } else {
-        res.status(404).send({ message: "Event not found" });
-      }
-    } else {
-      throw new Error("you are not an admin");
+    const events = await Event.find({ organizer: req.user._id }).populate(
+      "organizer"
+    );
+    if (events) {
+      res.status(200).send(events);
     }
   } catch (err) {
-    res.send(err);
+    res.send(err).status(404);
   }
 };
 
 const addEvent = async (req, res) => {
-  const { title, description, banner } = req.body;
-  console.log(
-    "🚀 ~ file: eventController.js:24 ~ addEvent ~ req.body",
-    req.body
-  );
-
   try {
-    const new_event = new Event({
-      title,
-      description,
-      banner,
-      owner: req.user._id,
-    });
+    const new_event = new Event({ ...req.body, organizer: req.user._id });
     await new_event.save();
     res.send(new_event).status(200);
   } catch (err) {
@@ -72,7 +57,9 @@ const deleteEvent = async (req, res) => {
 
 const getAllEvents = async (req, res) => {
   try {
-    const Events = await Event.find({});
+    const Events = await Event.find({})
+      .populate("organizer")
+      .sort({ createdAt: -1 });
 
     res.send(Events).status(200);
   } catch (error) {
@@ -80,14 +67,30 @@ const getAllEvents = async (req, res) => {
   }
 };
 
-// exports.searchEvent = async (req, res) => {
-//   try {
-//     const event = await Event.find({ $text: { $search: req.params.text } });
-//     res.json(event);
-//   } catch (err) {
-//     error(res, err);
-//   }
-// };
+const addVolunteer = async (req, res) => {
+  try {
+    const { _id, volunteer } = req.body;
+
+    const isVolunteer = await Event.findByIdAndUpdate(_id, {
+      $addToSet: { volunteer },
+    });
+    res.send({ success: true }).status(200);
+  } catch (error) {
+    res.send().status(400);
+  }
+};
+
+// get recent events
+
+const getRecentEvents = async (req, res) => {
+  try {
+    const events = await Event.find().sort({ $natural: 1 }).limit(10);
+
+    res.status(201).send({ events });
+  } catch (error) {
+    res.status(404).send();
+  }
+};
 
 module.exports = {
   addEvent,
@@ -95,4 +98,6 @@ module.exports = {
   deleteEvent,
   updateEvent,
   getAllEvents,
+  addVolunteer,
+  getRecentEvents,
 };

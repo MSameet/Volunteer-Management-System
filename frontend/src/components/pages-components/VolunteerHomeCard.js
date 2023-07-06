@@ -1,35 +1,30 @@
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
-import React from "react";
 import StarIcon from "@mui/icons-material/Star";
-export const VolunteerHomeCard = (volunteer) => {
-  function renderRating(val) {
-    let array = "";
-    for (let i = 1; i <= val; i++) {
-      console.log(val);
-      array = [...array, <StarIcon />];
-    }
-    return array;
-  }
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import React from "react";
+export const VolunteerHomeCard = ({ volunteer }) => {
   return (
     <Card>
+      <CardMedia
+        component="img"
+        alt="green iguana"
+        height="340"
+        xs={{ objectFit: "cover" }}
+        image={volunteer?.avatar}
+      />
       <CardContent>
-        <Box sx={{ textAlign: "center", marginBottom: "10px" }}>
-          <CardMedia
-            sx={{ height: 140 }}
-            image={volunteer.avatar}
-            title="green iguana"
-          />
-        </Box>
-        <Typography
-          variant="h6"
-          sx={{ textAlign: "center", textTransform: "uppercase" }}
-        >
-          {volunteer.name},{volunteer.country}
+        <Typography gutterBottom variant="h5" component="div">
+          {volunteer?.name}
         </Typography>
-        <Typography sx={{ textAlign: "center" }}>{volunteer.email}</Typography>
-        <Typography sx={{ textAlign: "center" }}>
-          {" "}
-          {renderRating(volunteer.rating)}
+        <Typography variant="body2" color="text.secondary">
+          {volunteer?.email}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {volunteer?.city}, {volunteer?.country}
+        </Typography>
+        <Typography>
+          {[...new Array(volunteer?.rating)].map((_, i) => (
+            <StarIcon key={i} />
+          ))}
         </Typography>
       </CardContent>
     </Card>

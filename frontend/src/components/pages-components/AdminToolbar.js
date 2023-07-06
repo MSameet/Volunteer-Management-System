@@ -1,37 +1,25 @@
-import { Button, IconButton, Toolbar, Typography } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import { AppBar, Container, Toolbar, Typography } from "@mui/material";
 import React from "react";
-import { useDispatch } from "react-redux";
-import { logout } from "../../redux/reducer/userReducer";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import AccountMenu from "./AccountMenu";
 
-export const AdminToolbar = ({ toggleDrawer }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate("");
+export const AdminToolbar = () => {
+  const { name } = useSelector((state) => state?.userReducer?.user);
   return (
-    <Toolbar>
-      <IconButton
-        color="inherit"
-        aria-label="open drawer"
-        onClick={toggleDrawer("left", true)}
-        edge="start"
-      >
-        <MenuIcon />
-      </IconButton>
-      <Typography variant="h6" noWrap component="div">
-        Admin
-      </Typography>
-      <Button
-        variant="outlined"
-        onClick={() => {
-          window.localStorage.removeItem("user");
-          window.localStorage.removeItem("token");
-          dispatch(logout());
-          navigate("/");
-        }}
-      >
-        Logout
-      </Button>
-    </Toolbar>
+    <AppBar AppBar position="static" className="header">
+      <Container>
+        <Toolbar sx={{ justifyContent: "space-between" }}>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ textTransform: "capitalize", color: "black" }}
+          >
+            {name}
+          </Typography>
+          <AccountMenu />
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };

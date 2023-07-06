@@ -13,14 +13,17 @@ const {
   getVolunteers,
   adminLogin,
   volunteerRating,
+  getTopVolunteer,
 } = require("../controllers/userController");
 
-router.post("/register", registerUser);
+// router.post("/register", registerUser);
 router.post("/login", userLogin);
 
 router.get("/users/logout", auth, userLogout);
 router.get("/volunteers", getVolunteers);
 router.patch("/volunteer-rating/:id", volunteerRating);
+
+router.get("/top-volunteers", getTopVolunteer);
 
 // router.get("/event/me", auth, getEventByUser);
 // router.get("/:id", auth, getUserInEvent);

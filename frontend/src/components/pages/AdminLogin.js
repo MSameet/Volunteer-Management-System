@@ -1,11 +1,10 @@
-import React, { useState } from "react";
 import { Button, Grid, TextField } from "@mui/material";
-import volunteers from "../../assets/i/user-male.png";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../redux/reducer/adminReducer";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { Axios } from "../../Axios";
+import volunteers from "../../assets/i/user-male.png";
+import { login } from "../../redux/reducer/adminReducer";
 
 export const AdminLogin = () => {
   const [email, setEmail] = useState("");

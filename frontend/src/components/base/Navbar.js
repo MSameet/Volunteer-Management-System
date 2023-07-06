@@ -1,28 +1,30 @@
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  Container,
-  Typography,
-} from "@mui/material";
-import React, { useState } from "react";
+import { AppBar, Button, Container } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import logo from "../../assets/i/logo.png";
-import { logout } from "../../redux/reducer/userReducer";
+import { Link, useLocation } from "react-router-dom";
+import logo from "../../assets/i/logo.jpeg";
+import AccountMenu from "../pages-components/AccountMenu";
 
 export const Navbar = () => {
-  const [user, setUser] = useState(
-    JSON.parse(window.localStorage.getItem("user"))
-  );
-  console.log("🚀 ~ file: Navbar.js:17 ~ Navbar ~ user", user);
-
-  // const role = window.localStorage.getItem("admin");
-
+  const { user } = useSelector((state) => state?.userReducer);
   const dispatch = useDispatch();
+  const [active, setActive] = useState(false);
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (window.pageYOffset > 50) {
+          setActive(true);
+        } else {
+          setActive(false);
+        }
+      },
+      false
+    );
+  }, [active]);
   return (
-    <AppBar position="fixed" className="header">
+    <AppBar position={active ? "fixed" : "static"} className="header">
       <Container fixed className="header_container" height="100%">
         <div className="header__inner-container">
           <Link to="/" className="logo">
@@ -30,59 +32,47 @@ export const Navbar = () => {
           </Link>
           <ul className="navbar">
             <li className="nav_items">
-              <Link to="/" className="nav_link">
+              <Link
+                to="/"
+                className={`nav_link ${pathname == "/" ? "active" : ""}`}
+              >
                 Home
               </Link>
             </li>
             <li className="nav_items">
-              <Link to="/events" className="nav_link">
+              <Link
+                to="/events"
+                className={`nav_link ${pathname == "/events" ? "active" : ""}`}
+              >
                 Events
               </Link>
             </li>
             <li className="nav_items">
-              <Link to="/volunteer" className="nav_link">
+              <Link
+                to="/volunteer"
+                className={`nav_link ${
+                  pathname == "/volunteer" ? "active" : ""
+                }`}
+              >
                 Volunteers
               </Link>
             </li>
             {user && user.role == "Volunteer" && (
               <li className="nav_items">
-                <Link to="/profile" className="nav_link">
+                <Link
+                  to="/profile"
+                  className={`nav_link ${
+                    pathname == "/profile" ? "active" : ""
+                  }`}
+                >
                   Profile
                 </Link>
               </li>
             )}
-
-            <li className="nav_items">
-              {user?.role == "admin" ? (
-                <Link to="/admin" className="nav_link">
-                  Admin
-                </Link>
-              ) : (
-                <Link to="/admin/login" className="nav_link">
-                  Admin
-                </Link>
-              )}
-            </li>
           </ul>
           <div className="header__logoinbtn">
-            {user && user?.role == "Volunteer" ? (
-              <Box
-                style={{ display: "flex", alignItems: "center", gap: "10px" }}
-              >
-                <Avatar alt={user?.name} src={user?.avatar} />
-                <Typography>{user?.name}</Typography>
-                <Button
-                  variant="outlined"
-                  onClick={() => {
-                    window.localStorage.removeItem("user");
-                    window.localStorage.removeItem("token");
-                    dispatch(logout());
-                    setUser("");
-                  }}
-                >
-                  Logout
-                </Button>
-              </Box>
+            {user?.role == "volunteer" ? (
+              <AccountMenu />
             ) : (
               <Button variant="outlined" href="/login">
                 Login

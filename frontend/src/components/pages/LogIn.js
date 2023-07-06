@@ -1,9 +1,9 @@
-import React, { useState } from "react";
 import { Button, Grid, TextField } from "@mui/material";
-import volunteers from "../../assets/i/user-male.png";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { Axios } from "../../Axios";
+import volunteers from "../../assets/i/user-male.png";
 import { login } from "../../redux/reducer/userReducer";
 
 export const LogIn = () => {
@@ -11,6 +11,7 @@ export const LogIn = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { token } = useSelector((state) => state?.userReducer);
 
   function userLogin() {
     const config = {
@@ -20,21 +21,18 @@ export const LogIn = () => {
       },
     };
 
-    axios
-      .post(
-        `http://localhost:8080/user/login`,
-        {
-          email,
-          password,
-        },
-        config
-      )
+    Axios.post(
+      `/user/login`,
+      {
+        email,
+        password,
+      },
+      config
+    )
       .then((res) => {
-        console.log(res.data);
+        console.log(res.data, "LOGIN");
         dispatch(login(res.data));
-        window.localStorage.setItem("user", JSON.stringify(res?.data?.user));
-        window.localStorage.setItem("token", res?.data?.token);
-        if (res.data.token && res?.data?.user?.role == "Volunteer") {
+        if (res?.data?.user?.role == "volunteer") {
           navigate("/");
         }
         if (res?.data?.user?.role == "admin") {

@@ -1,133 +1,87 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
-  TextField,
-} from "@mui/material";
-import volunteers from "../../assets/i/user-male.png";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import { signup } from "../../redux/reducer/userReducer";
-import FileBase from "react-file-base64";
-import { Axios } from "../../Axios";
+import { Box, Container, Typography, Paper } from "@mui/material";
+import styled from "@emotion/styled";
+import React from "react";
+import { OrganizerSignup } from "./OrganizerSignup";
+import { VolunteerSignup } from "./VolunteerSignup";
 
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(3),
+  boxShadow: "0 0 20px 0 rgba(188,209,218,.31)",
+  border: "1px solid rgba(126,151,172,.15)",
+  marginBlock: "18px",
+}));
 export const Signup = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
-  const [password, setPassword] = useState("");
-  const [avatar, setAvatar] = useState();
+  const [selectedValue, setSelectedValue] = React.useState("volunteer");
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  function userSignUp() {
-    Axios.post("/user/register", {
-      name,
-      email,
-      password,
-      city,
-      country,
-      avatar,
-    })
-      .then((res) => {
-        console.log(res.data);
-        dispatch(signup(res.data));
-        window.localStorage.setItem("user", JSON.stringify(res.data.user));
-        window.localStorage.setItem("token", res.data.token);
-        if (res.data.token) {
-          navigate("/");
-        }
-      })
-      .catch((err) => console.log(err));
-  }
-
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
   return (
-    <div className="register_container signup_container">
-      <Grid container className="register__innercontainer">
-        <Grid item xs={5} className="register_img-box">
-          <h1 className="register_heading">Signup</h1>
-          <img src={volunteers} alt="" className="register_img" />
-        </Grid>
-        <Grid item xs={7} className="register__box">
-          <form className="inputs_form">
-            <TextField
-              label="Name"
-              variant="outlined"
-              className="input__fields"
-              onChange={(e) => setName(e.target.value)}
-            />
-            <TextField
-              label="Email"
-              variant="outlined"
-              className="input__fields"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              label="City"
-              variant="outlined"
-              className="input__fields"
-              onChange={(e) => setCity(e.target.value)}
-            />
-            <TextField
-              label="Country"
-              variant="outlined"
-              className="input__fields"
-              onChange={(e) => setCountry(e.target.value)}
-            />
-            <TextField
-              label="Password"
-              variant="outlined"
-              type="text"
-              className="input__fields"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Role</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                // value={age}
-                label="Role"
-              >
-                <MenuItem value={"Volunteer"}>Volunteer</MenuItem>
-                <MenuItem value={"Admin"}>Admin</MenuItem>
-              </Select>
-            </FormControl>
-            <Box sx={{ marginBlock: "20px" }}>
-              <FileBase
-                type="file"
-                multiple={false}
-                onDone={({ base64 }) => setAvatar(base64)}
+    <Container>
+      <Box py={5} className="signup__box">
+        <Item>
+          <form className="plans" onChange={handleChange}>
+            <Typography variant="h4" className="title">
+              Get Started
+            </Typography>
+            <label class="plan basic-plan" for="basic">
+              <input
+                type="radio"
+                name="user"
+                id="basic"
+                value="volunteer"
+                checked={selectedValue == "volunteer"}
+                className="p-element"
               />
-            </Box>
+              <div class="plan-content">
+                <img loading="lazy" src="/assets/i/user_2_fill.svg" alt="" />
+                <div class="plan-details">
+                  <span>Volunteer</span>
+                  <p>
+                    For smaller business, with simple salaries and pay
+                    schedules.
+                  </p>
+                </div>
+              </div>
+            </label>
 
-            <div className="form_btn_box">
-              <Button
-                variant="contained"
-                className="form_btn"
-                onClick={userSignUp}
-              >
-                SignUp
-              </Button>
-            </div>
-
-            <p className="register__infotext">
-              Already have an account. <Link to="/login">Login</Link>
-            </p>
+            <label class="plan complete-plan" for="complete">
+              <input
+                type="radio"
+                name="user"
+                id="complete"
+                value="organizer"
+                checked={selectedValue == "organizer"}
+              />
+              <div class="plan-content">
+                <img
+                  loading="lazy"
+                  src="/assets/i/building_3_fill.svg"
+                  alt=""
+                />
+                <div class="plan-details">
+                  <span>Organization</span>
+                  <p>
+                    For growing business who wants to create a rewarding place
+                    to work.
+                  </p>
+                </div>
+              </div>
+            </label>
           </form>
-        </Grid>
-      </Grid>
-    </div>
+        </Item>
+        <Item>
+          {selectedValue == "volunteer" ? (
+            <VolunteerSignup role={selectedValue} />
+          ) : (
+            selectedValue == "organizer" && (
+              <OrganizerSignup role={selectedValue} />
+            )
+          )}
+        </Item>
+      </Box>
+    </Container>
   );
 };

@@ -8,6 +8,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    username: {
+      type: String,
+    },
     email: {
       type: String,
       unique: true,
@@ -15,6 +18,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
+      required: true,
     },
     country: {
       type: String,
@@ -22,9 +26,23 @@ const userSchema = new Schema(
     city: {
       type: String,
     },
+    address: {
+      type: String,
+    },
+    age: {
+      type: String,
+    },
+    dob: {
+      type: String,
+    },
+    phoneNumber: {
+      type: String,
+    },
     role: {
       type: String,
-      default: "Volunteer",
+      enum: ["admin", "volunteer", "organizer"],
+      default: "volunteer",
+      required: true,
     },
     avatar: {
       type: String,
@@ -33,6 +51,19 @@ const userSchema = new Schema(
       type: String,
       default: "0",
     },
+    type: {
+      type: String,
+    },
+    qualification: {
+      type: String,
+    },
+    skill: {
+      type: String,
+    },
+    about: {
+      type: String,
+    },
+    events: [{ type: Schema.Types.ObjectId, ref: "Event" }],
     tokens: [
       {
         token: {
@@ -52,11 +83,7 @@ userSchema.methods.toJSON = function () {
   const userObject = user.toObject();
   delete userObject.password;
   delete userObject.tokens;
-  delete userObject.avatar;
 
-  if (userObject.role == "admin") {
-    delete userObject.rating;
-  }
   return userObject;
 };
 

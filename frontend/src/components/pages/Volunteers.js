@@ -1,11 +1,10 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
-import { Axios } from "../../Axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Axios } from "../../Axios";
 import { VolunteerCard } from "../pages-components/VolunteerCard";
 
 export const Volunteers = () => {
-  const [volunteers, setVolunteers] = useState();
+  const [volunteers, setVolunteers] = useState([]);
   function fetchVolunteers() {
     Axios.get("/user/volunteers")
       .then((res) => {
@@ -19,13 +18,20 @@ export const Volunteers = () => {
   return (
     <Container>
       <Box sx={{ paddingBlock: "40px" }}>
-        <Typography variant="h3" xs={{ textAlign: "center" }}>
-          Volunteers
-        </Typography>
+        <Box
+          sx={{
+            height: "400px",
+            backgroundImage: `url(${"/assets/i/page-header-bg.jpg"})`,
+          }}
+        >
+          <Typography variant="h3" sx={{ textAlign: "center" }}>
+            Volunteers
+          </Typography>
+        </Box>
         <Grid container spacing={1.5}>
           {volunteers?.map((volunteer, i) => (
-            <Grid item xs={12} sm={6} lg={3} key={volunteer._id}>
-              <VolunteerCard {...volunteer} />
+            <Grid item xs={12} sm={6} lg={4} key={volunteer._id}>
+              <VolunteerCard volunteer={volunteer} />
             </Grid>
           ))}
         </Grid>
