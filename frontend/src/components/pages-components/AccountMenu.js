@@ -1,7 +1,6 @@
 import { LogoutOutlined } from "@mui/icons-material";
 import Logout from "@mui/icons-material/Logout";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import { CardContent, Divider, Grid, Stack, useTheme } from "@mui/material";
+import { CardContent, Grid, Stack, useTheme } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -17,7 +16,9 @@ import { admin, organizer, volunteer } from "../../data/links";
 import { logout } from "../../redux/reducer/userReducer";
 
 const AccountMenu = () => {
-  const { name, role } = useSelector((state) => state?.userReducer?.user);
+  const { name, role, avatar } = useSelector(
+    (state) => state?.userReducer?.user
+  );
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -48,9 +49,7 @@ const AccountMenu = () => {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>
-              {name.split("")[0].toUpperCase()}
-            </Avatar>
+            <Avatar sx={{ width: 32, height: 32 }} src={avatar}></Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -97,16 +96,20 @@ const AccountMenu = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <CardContent sx={{ px: 2.5, pt: 3 }}>
+        <CardContent sx={{ px: 2.5, pt: 3, mb: 2 }}>
           <Grid container justifyContent="space-between" alignItems="center">
             <Grid item>
               <Stack direction="row" spacing={1.25} alignItems="center">
                 <Stack>
-                  <Typography variant="h6" sx={{ textTransform: "capitalize" }}>
+                  <Typography
+                    variant="button"
+                    sx={{ textTransform: "capitalize", maxWidth: "200px" }}
+                    className="text-truncate"
+                  >
                     {name}
                   </Typography>
                   <Typography
-                    variant="body2"
+                    variant="caption"
                     color="textSecondary"
                     sx={{ textTransform: "capitalize" }}
                   >
@@ -117,30 +120,31 @@ const AccountMenu = () => {
             </Grid>
             <Grid item>
               <ListItemIcon
+                sx={{ cursor: "pointer" }}
                 onClick={() => {
                   dispatch(logout());
                   navigate("/");
                   handleClose();
                 }}
               >
-                <LogoutOutlined />
+                <LogoutOutlined fontSize="small" />
               </ListItemIcon>
             </Grid>
           </Grid>
         </CardContent>
-        <Divider mb={3} />
         {AppLinks?.map((link) => {
+          const { Icon } = link;
           return (
             <MenuItem onClick={handleClose}>
               <Link
                 to={link?.link}
                 style={{ color: "#000" }}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 w-100 p-1"
               >
                 <ListItemIcon>
-                  <PersonOutlineOutlinedIcon />
+                  <Icon fontSize="small" />
                 </ListItemIcon>{" "}
-                <Typography variant="subtitile1">{link?.title}</Typography>
+                <Typography variant="caption">{link?.title}</Typography>
               </Link>
             </MenuItem>
           );
@@ -153,11 +157,11 @@ const AccountMenu = () => {
             handleClose();
           }}
         >
-          <Box className="flex items-center gap-2">
-            <ListItemIcon>
+          <Box className="flex items-center gap-2 w-100 p-1">
+            <ListItemIcon className="ms-1">
               <Logout fontSize="small" />
             </ListItemIcon>
-            <Typography variant="subtitile1">Logout</Typography>
+            <Typography variant="caption">Logout</Typography>
           </Box>
         </MenuItem>
       </Menu>

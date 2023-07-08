@@ -1,20 +1,20 @@
 import { AppBar, Button, Container } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/i/logo.jpeg";
 import AccountMenu from "../pages-components/AccountMenu";
 
-export const Navbar = () => {
+const Navbar = () => {
   const { user } = useSelector((state) => state?.userReducer);
-  const dispatch = useDispatch();
   const [active, setActive] = useState(false);
+  const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
   useEffect(() => {
     window.addEventListener(
       "scroll",
       function () {
-        if (window.pageYOffset > 50) {
+        if (window.pageYOffset > 400) {
           setActive(true);
         } else {
           setActive(false);
@@ -24,7 +24,7 @@ export const Navbar = () => {
     );
   }, [active]);
   return (
-    <AppBar position={active ? "fixed" : "static"} className="header">
+    <AppBar position={"static"} className="header">
       <Container fixed className="header_container" height="100%">
         <div className="header__inner-container">
           <Link to="/" className="logo">
@@ -47,7 +47,7 @@ export const Navbar = () => {
                 Events
               </Link>
             </li>
-            <li className="nav_items">
+            {/* <li className="nav_items">
               <Link
                 to="/volunteer"
                 className={`nav_link ${
@@ -56,8 +56,8 @@ export const Navbar = () => {
               >
                 Volunteers
               </Link>
-            </li>
-            {user && user.role == "Volunteer" && (
+            </li> */}
+            {user && user.role == "volunteer" && (
               <li className="nav_items">
                 <Link
                   to="/profile"
@@ -84,3 +84,4 @@ export const Navbar = () => {
     </AppBar>
   );
 };
+export default Navbar;

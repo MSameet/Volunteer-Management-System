@@ -4,9 +4,11 @@ const sharp = require("sharp");
 
 const getEvents = async (req, res) => {
   try {
-    const events = await Event.find({ organizer: req.user._id }).populate(
-      "organizer"
-    );
+    const { page, pageSize } = req.query;
+    const events = await Event.find({ organizer: req.user._id })
+      .limit(pageSize)
+      .skip(page)
+      .populate("organizer");
     if (events) {
       res.status(200).send(events);
     }
@@ -15,6 +17,17 @@ const getEvents = async (req, res) => {
   }
 };
 
+// get single event
+
+const singleEvent = async (req, res) => {
+  try {
+    const { _id } = req.query;
+    const event = await Event.findById(_id).populate("volunteers");
+    res.status(200).send(event);
+  } catch (error) {
+    res.status(403).send(error);
+  }
+};
 const addEvent = async (req, res) => {
   try {
     const new_event = new Event({ ...req.body, organizer: req.user._id });
@@ -25,22 +38,15 @@ const addEvent = async (req, res) => {
   }
 };
 const updateEvent = async (req, res) => {
-  const { title, description } = req.body;
-
   try {
-    const banner = sharp(req.file.buffer)
-      .resize({ width: 250, height: 250 })
-      .png()
-      .toBuffer();
+    const { _id } = req.query;
 
-    const new_event = new Event({
-      title,
-      description,
-      banner,
-      owner: req.user._id,
-    });
-    await new_event.save();
-    res.send(new_event).status(200);
+    const event = await Event.findByIdAndUpdate(
+      _id,
+      { $set: req.body },
+      { new: true }
+    );
+    res.send(event).status(200);
   } catch (err) {
     res.send(err);
   }
@@ -92,6 +98,24 @@ const getRecentEvents = async (req, res) => {
   }
 };
 
+// update event status
+
+const updateEventStatus = async (req, res) => {
+  try {
+    let { _id, status } = req.body;
+
+    const event = await Event.findByIdAndUpdate(
+      _id,
+      { $set: { status } },
+      { new: true }
+    );
+
+    res.status(201).send(event);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+};
+
 module.exports = {
   addEvent,
   getEvents,
@@ -100,4 +124,6 @@ module.exports = {
   getAllEvents,
   addVolunteer,
   getRecentEvents,
+  updateEventStatus,
+  singleEvent,
 };

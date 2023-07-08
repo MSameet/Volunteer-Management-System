@@ -55,9 +55,11 @@ let fullWidthStyle = {
   p: 4,
 };
 export const Admin = () => {
-  const [events, setEvents] = useState([]);
-
   const { token } = useSelector((state) => state?.userReducer);
+  const [events, setEvents] = useState([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [count, setCount] = useState("");
 
   function fetchEvents() {
     const config = {
@@ -65,21 +67,18 @@ export const Admin = () => {
         Authorization: `Bearer ${token}`,
       },
     };
-    Axios.get(`/event/events`, config)
+    Axios.get(`/event/events?pageSize=${rowsPerPage}&page=${page}`, config)
       .then((res) => {
         setEvents(res.data);
+        setCount(res.data?.length);
         console.log(res.data, "events");
       })
       .catch((err) => console.log(err));
   }
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [page, rowsPerPage]);
   // new chagnes
-
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [count, setCount] = useState("");
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -126,6 +125,7 @@ export const Admin = () => {
                               <TableCell>Description</TableCell>
                               <TableCell>Type</TableCell>
                               <TableCell>Duration</TableCell>
+                              <TableCell>Status</TableCell>
                               <TableCell>Actions</TableCell>
                               <TableCell>Preview</TableCell>
                             </TableRow>
@@ -141,6 +141,7 @@ export const Admin = () => {
                                     </TableCell>
                                     <TableCell>{data?.type}</TableCell>
                                     <TableCell>{data?.duration}</TableCell>
+                                    <TableCell>{data?.status}</TableCell>
                                     <TableCell>
                                       <Link
                                         to={{

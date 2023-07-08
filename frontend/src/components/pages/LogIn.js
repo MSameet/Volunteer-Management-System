@@ -6,7 +6,7 @@ import { Axios } from "../../Axios";
 import volunteers from "../../assets/i/user-male.png";
 import { login } from "../../redux/reducer/userReducer";
 
-export const LogIn = () => {
+const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -30,10 +30,12 @@ export const LogIn = () => {
       config
     )
       .then((res) => {
-        console.log(res.data, "LOGIN");
         dispatch(login(res.data));
         if (res?.data?.user?.role == "volunteer") {
           navigate("/");
+        }
+        if (res?.data?.user?.role == "organizer") {
+          navigate("/event");
         }
         if (res?.data?.user?.role == "admin") {
           navigate("/admin");
@@ -80,3 +82,5 @@ export const LogIn = () => {
     </div>
   );
 };
+
+export default LogIn;

@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const auth = require("../middleware/auth");
+const { auth, organizerAuth } = require("../middleware/auth");
 
 const {
   addEvent,
@@ -10,17 +10,23 @@ const {
   getAllEvents,
   addVolunteer,
   getRecentEvents,
+  updateEventStatus,
+  singleEvent,
 } = require("../controllers/eventController");
 
-router.post("/add-event", auth, addEvent);
+router.post("/add-event", organizerAuth, addEvent);
 
-router.get("/events", auth, getEvents);
+router.get("/events", organizerAuth, getEvents);
 
 router.get("/all-events", getAllEvents);
 
-router.post("/events", auth, updateEvent);
+router.get("/single-event", singleEvent);
 
-router.delete("/:id", auth, deleteEvent);
+router.patch("/events", auth, updateEvent);
+
+router.patch("/event-status", auth, updateEventStatus);
+
+router.delete("/:id", organizerAuth, deleteEvent);
 
 router.route("/add-volunteer").post(auth, addVolunteer);
 

@@ -18,7 +18,7 @@ import { Axios } from "../../Axios";
 import AlertBox from "../ui/AlertBox";
 
 export const CreateEvent = () => {
-  const { token } = useSelector((state) => state?.userReducer);
+  const { token, _id } = useSelector((state) => state?.userReducer);
   const [open, setOpen] = useState("");
 
   // yup validation
@@ -33,7 +33,7 @@ export const CreateEvent = () => {
     type: Yup.string().required("Type is required"),
     city: Yup.string().required("City is required"),
     country: Yup.string().required("Country is required"),
-    noOfAssigments: Yup.string().required("No Of Assigments is required"),
+    noOfAssignments: Yup.string().required("No Of Assigments is required"),
   });
 
   const handleSubmit = (values) => {
@@ -52,7 +52,11 @@ export const CreateEvent = () => {
     )
       .then((res) => {
         setOpen("success");
+        let interval = setTimeout(() => setOpen(""), 3000);
         formik.resetForm();
+        return () => {
+          clearTimeout(interval);
+        };
       })
       .catch((err) => console.log(err));
   };
@@ -66,7 +70,7 @@ export const CreateEvent = () => {
       duration: "",
       country: "",
       city: "",
-      noOfAssigments: "",
+      noOfAssignments: "",
       banner: "",
       startDate: "",
       endDate: "",
@@ -167,20 +171,21 @@ export const CreateEvent = () => {
               label="No Of Assigments"
               variant="outlined"
               placeholder="No Of Assigments"
-              {...formik.getFieldProps("noOfAssigments")}
+              {...formik.getFieldProps("noOfAssignments")}
               error={Boolean(
-                formik.touched.noOfAssigments && formik.errors.noOfAssigments
+                formik.touched.noOfAssignments && formik.errors.noOfAssignments
               )}
               fullWidth
             />
-            {formik.touched.noOfAssigments && formik.errors.noOfAssigments && (
-              <FormHelperText
-                error
-                id="standard-weight-helper-text-urdu.noOfAssigments-login"
-              >
-                {formik.errors.noOfAssigments}
-              </FormHelperText>
-            )}
+            {formik.touched.noOfAssignments &&
+              formik.errors.noOfAssignments && (
+                <FormHelperText
+                  error
+                  id="standard-weight-helper-text-urdu.noOfAssignments-login"
+                >
+                  {formik.errors.noOfAssignments}
+                </FormHelperText>
+              )}
           </Grid>
           <Grid item md={6} xs={12}>
             {" "}
@@ -320,7 +325,7 @@ export const CreateEvent = () => {
           <Button variant="contained" type="submit" onClick={formik.submitForm}>
             Create
           </Button>
-          <Button variant="outlined" href="/admin">
+          <Button variant="outlined" href="/event">
             Back
           </Button>
         </Box>

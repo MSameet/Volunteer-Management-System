@@ -1,18 +1,22 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { Navbar } from "../components/base/Navbar";
-import { Events } from "../components/pages/Events";
-import { Home } from "../components/pages/Home";
-import { LogIn } from "../components/pages/LogIn";
-import { Profile } from "../components/pages/Profile";
-import { Signup } from "../components/pages/Signup";
-import SingleEvent from "../components/pages/SingleEvent";
-import { VolunteerHome } from "../components/pages/VolunteerHome";
 import { PrivateRoute } from "./PrivateRoute";
+const Events = lazy(() => import("../components/pages/Events"));
+const LogIn = lazy(() => import("../components/pages/LogIn"));
+const EditProfile = lazy(() => import("../components/pages/EditProfile"));
+const Profile = lazy(() => import("../components/pages/Profile"));
+
+const Signup = lazy(() => import("../components/pages/Signup"));
+const Navbar = lazy(() => import("../components/base/Navbar"));
+const Home = lazy(() => import("../components/pages/Home"));
+const VolunteerRequest = lazy(() =>
+  import("../components/pages/VolunteerRequest")
+);
+const SingleEvent = lazy(() => import("../components/pages/SingleEvent"));
+const Footer = lazy(() => import("../components/base/Footer"));
 
 export const DefaultRoutes = () => {
   let { pathname } = useLocation();
-  console.log(pathname);
   return (
     <div className="app__container">
       {!(pathname == "/login" || pathname == "/signup") && <Navbar />}
@@ -20,9 +24,10 @@ export const DefaultRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/request" element={<VolunteerRequest />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/events" element={<Events />} />
         <Route path="/event/:id" element={<SingleEvent />} />
-        <Route path="/volunteer" element={<VolunteerHome />} />
         <Route
           path="profile"
           element={
@@ -33,6 +38,7 @@ export const DefaultRoutes = () => {
         />
         <Route path="/admin/login" element={<LogIn />} />
       </Routes>
+      {!(pathname == "/login" || pathname == "/signup") && <Footer />}
     </div>
   );
 };

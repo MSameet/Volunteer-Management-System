@@ -1,15 +1,13 @@
 const { Schema, model } = require("mongoose");
 const requestSchema = new Schema(
   {
-    type: {
-      type: String,
-    },
+    sender: { type: Schema.Types.ObjectId, ref: "User" },
+    event: { type: Schema.Types.ObjectId, ref: "Event" },
     status: {
       type: String,
       enum: ["success", "reject", "pending"],
       default: "pending",
     },
-    data: { type: Object },
   },
   {
     timeStamp: true,

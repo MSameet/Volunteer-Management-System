@@ -8,17 +8,16 @@ const userSlice = createSlice({
       return action?.payload;
     },
     signup: (state, action) => {
-      return {
-        ...state,
-        user: action.payload.user,
-        token: action.payload.token,
-      };
+      return action?.payload;
     },
     logout: (state, action) => {
       return (state = {});
     },
+    updateUser: (state, action) => {
+      return { ...state, user: action.payload.user };
+    },
   },
 });
 
-export const { login, signup, logout } = userSlice.actions;
+export const { login, signup, logout, updateUser } = userSlice.actions;
 export const userReducer = userSlice.reducer;

@@ -22,7 +22,7 @@ const Item = styled(Paper)(({ theme }) => ({
   marginBlock: "18px",
 }));
 
-export const Profile = () => {
+const Profile = () => {
   const { user } = useSelector((state) => state?.userReducer);
   return (
     <>
@@ -61,7 +61,9 @@ export const Profile = () => {
                 </Box>
               </Box>
             </Box>
-            <Button variant="contained">Edit</Button>
+            <Button variant="contained" href="/edit-profile">
+              Edit
+            </Button>
           </Box>
         </Item>
         <Item>
@@ -85,7 +87,7 @@ export const Profile = () => {
               <Typography variant="subtitle2">Phone Number</Typography>
               <Typography variant="caption">{user?.phoneNumber}</Typography>
             </Grid>
-            {user?.role == "volunteer" ? (
+            {user?.role == "volunteer" || user?.role == "admin" ? (
               <Grid item md={6} xs={12}>
                 <Typography variant="subtitle2">Skill(s)</Typography>
                 <Typography variant="caption">{user?.skill}</Typography>
@@ -147,3 +149,4 @@ export const Profile = () => {
     </>
   );
 };
+export default Profile;

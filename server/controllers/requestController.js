@@ -4,54 +4,11 @@ const User = require("../models/User");
 
 // create user request
 
-const createUserRequest = async (req, res) => {
+const userRequest = async (req, res) => {
   try {
-    const { type, data } = req.body;
-    const request = new Request({ type, data });
+    const request = new Request(req.body);
     await request.save();
     res.send(request).status(201);
-  } catch (error) {
-    res.status(404).send(error);
-  }
-};
-// accept-user-create-request
-
-const acceptUserCreateRequest = async (req, res) => {
-  try {
-    const { _id } = req.query;
-
-    const updateRequest = await Request.findByIdAndUpdate(
-      { _id },
-      { $set: { status: "accept" } },
-      { new: true }
-    );
-    const userExist = await User.findOne({ email: updateRequest?.data?.email });
-
-    if (userExist) {
-      res
-        .send({ error: "User is already existed, try another email address." })
-        .status(504);
-    }
-
-    const user = new User(updateRequest?.data);
-    const token = await user.generateAuthToken();
-    await user.save();
-    res.send({ user, token }).status(200);
-  } catch (error) {
-    res.status(404).send(error);
-  }
-};
-
-// reject user request
-const rejectUserRequest = async (req, res) => {
-  try {
-    const { _id } = req.query;
-    const updateRequest = await Request.findByIdAndUpdate(
-      { _id },
-      { $set: { status: "reject" } },
-      { new: true }
-    );
-    res.status(201).send(updateRequest);
   } catch (error) {
     res.status(404).send(error);
   }
@@ -104,11 +61,22 @@ const getMyRequest = async (req, res) => {
   try {
     const { _id } = req.query;
     const request = await Request.find({ "data.event": _id });
+
     res.status(201).send(request);
   } catch (error) {
     res.status(404).send(error);
   }
 };
+// get user request
+async function getUserRequest(req, res) {
+  try {
+    const { _id, page, pageSize } = req.query;
+    const request = await Request.find({ by: _id }).limit(pageSize).skip(page);
+    res.status(200).send(request);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+}
 
 // get all request
 const getAllRequest = async (req, res) => {
@@ -126,11 +94,10 @@ const getAllRequest = async (req, res) => {
 };
 
 module.exports = {
-  acceptUserCreateRequest,
-  createUserRequest,
-  rejectUserRequest,
+  userRequest,
   acceptVolunteeringRequest,
   rejectVolunteeringRequest,
   getMyRequest,
+  getUserRequest,
   getAllRequest,
 };

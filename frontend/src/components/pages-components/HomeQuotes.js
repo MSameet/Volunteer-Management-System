@@ -3,7 +3,9 @@ import React from "react";
 import { Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import img_2 from "../../assets/i/churchill.jpg";
+import img_3 from "../../assets/i/coehlo.jpeg";
 import img_1 from "../../assets/i/gandhi.jpg";
+import img_4 from "../../assets/i/pablo.webp";
 import quote from "../../assets/i/quote.png";
 
 function Main() {
@@ -93,6 +95,45 @@ function Main() {
               </div>
               <div className="box__authorimg">
                 <img src={img_2} alt="" />
+              </div>
+            </div>
+
+            {/* <ArticalCard /> */}
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className="box">
+              <div className="box__quote">
+                {" "}
+                <img src={quote} alt="" srcset="" />
+              </div>
+              <div className="box__text">
+                <p>
+                  The meaning of life is to find your gift. The purpose of life
+                  is to give it away.
+                </p>
+                <h3>- Pablo Picasso</h3>{" "}
+              </div>
+              <div className="box__authorimg">
+                <img src={img_4} alt="" />
+              </div>
+            </div>
+
+            {/* <ArticalCard /> */}
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className="box">
+              <div className="box__quote">
+                {" "}
+                <img src={quote} alt="" srcset="" />
+              </div>
+              <div className="box__text">
+                <p>
+                  The world is changed by your example, not by your opinion.
+                </p>
+                <h3>- Paulo Coelho</h3>{" "}
+              </div>
+              <div className="box__authorimg">
+                <img src={img_3} alt="" />
               </div>
             </div>
 

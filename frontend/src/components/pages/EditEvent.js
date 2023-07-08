@@ -1,4 +1,3 @@
-import CloseIcon from "@mui/icons-material/Close";
 import {
   Box,
   Button,
@@ -6,11 +5,9 @@ import {
   FormControl,
   FormHelperText,
   Grid,
-  IconButton,
   InputLabel,
   MenuItem,
   Select,
-  Snackbar,
   Stack,
   TextField,
   Typography,
@@ -22,6 +19,7 @@ import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import * as Yup from "yup";
 import { Axios } from "../../Axios";
+import AlertBox from "../ui/AlertBox";
 
 const EditEvent = () => {
   const { token } = useSelector((state) => state?.userReducer);
@@ -34,7 +32,7 @@ const EditEvent = () => {
     duration,
     country,
     city,
-    noOfAssigments,
+    noOfAssignments,
     banner,
     startDate,
     endDate,
@@ -55,7 +53,7 @@ const EditEvent = () => {
     city: Yup.string().required("City is required"),
     country: Yup.string().required("Country is required"),
     status: Yup.string().required("Status is required"),
-    noOfAssigments: Yup.string().required("No Of Assigments is required"),
+    noOfAssignments: Yup.string().required("No Of Assigments is required"),
   });
 
   const handleSubmit = (values) => {
@@ -65,16 +63,15 @@ const EditEvent = () => {
         Authorization: `Bearer ${token}`,
       },
     };
-    Axios.post(
-      `/event/add-event`,
+    Axios.patch(
+      `/event/events?_id=${state?._id}`,
       {
         ...values,
       },
       config
     )
       .then((res) => {
-        setSuccess("Event is created");
-        formik.resetForm();
+        setSuccess("Event");
       })
       .catch((err) => console.log(err));
   };
@@ -88,7 +85,7 @@ const EditEvent = () => {
       duration,
       country,
       city,
-      noOfAssigments,
+      noOfAssignments,
       banner,
       startDate,
       endDate,
@@ -278,20 +275,21 @@ const EditEvent = () => {
               label="No Of Assigments"
               variant="outlined"
               placeholder="No Of Assigments"
-              {...formik.getFieldProps("noOfAssigments")}
+              {...formik.getFieldProps("noOfAssignments")}
               error={Boolean(
-                formik.touched.noOfAssigments && formik.errors.noOfAssigments
+                formik.touched.noOfAssignments && formik.errors.noOfAssignments
               )}
               fullWidth
             />
-            {formik.touched.noOfAssigments && formik.errors.noOfAssigments && (
-              <FormHelperText
-                error
-                id="standard-weight-helper-text-urdu.noOfAssigments-login"
-              >
-                {formik.errors.noOfAssigments}
-              </FormHelperText>
-            )}
+            {formik.touched.noOfAssignments &&
+              formik.errors.noOfAssignments && (
+                <FormHelperText
+                  error
+                  id="standard-weight-helper-text-urdu.noOfAssignments-login"
+                >
+                  {formik.errors.noOfAssignments}
+                </FormHelperText>
+              )}
           </Grid>
           <Grid item xs={12}>
             <FormControl fullWidth>
@@ -303,8 +301,8 @@ const EditEvent = () => {
                 {...formik.getFieldProps("status")}
                 error={Boolean(formik.touched.status && formik.errors.status)}
               >
-                <MenuItem value={"active"}>Active</MenuItem>
-                <MenuItem value={"inactive"}>Inactive</MenuItem>
+                <MenuItem value={"inprogress"}>Inprogress</MenuItem>
+                <MenuItem value={"completed"}>Completed</MenuItem>
               </Select>
             </FormControl>
             {formik.touched.status && formik.errors.status && (
@@ -340,11 +338,27 @@ const EditEvent = () => {
           <Grid item xs={12}>
             <Stack spacing={1}>
               <InputLabel htmlFor="email-login">Banner</InputLabel>
-              <FileBase
-                type="file"
-                multiple={false}
-                onDone={({ base64 }) => formik.setFieldValue("banner", base64)}
-              />
+              <div className="uploader__box">
+                <FileBase
+                  type="file"
+                  multiple={false}
+                  onDone={({ base64 }) =>
+                    formik.setFieldValue("banner", base64)
+                  }
+                />
+                <img
+                  src={
+                    formik.values?.banner
+                      ? formik.values?.banner
+                      : "/assets/i/upload_3_fill.svg"
+                  }
+                  alt=""
+                  className={`img-fluid ${
+                    formik.values?.banner && "avatar__img"
+                  }`}
+                />
+              </div>
+
               {formik.touched.banner && formik.errors.banner && (
                 <FormHelperText
                   error
@@ -368,33 +382,15 @@ const EditEvent = () => {
           <Button variant="contained" type="submit" onClick={formik.submitForm}>
             Update
           </Button>
-          <Button variant="outlined" href="/admin">
+          <Button variant="outlined" href="/event">
             Back
           </Button>
         </Box>
 
-        <Snackbar
-          open={success}
-          autoHideDuration={4000}
-          onClose={() => {
-            setSuccess(false);
-          }}
-          anchorOrigin={{ vertical, horizontal }}
-          key={vertical + horizontal}
-          message={success}
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => {
-                setSuccess(false);
-              }}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-          sx={{ mb: 2 }}
+        <AlertBox
+          open={success == "Event"}
+          severity="success"
+          message="Event is updated"
         />
       </Container>
     </Box>

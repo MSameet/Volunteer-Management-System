@@ -1,5 +1,4 @@
-import CloseIcon from "@mui/icons-material/Close";
-import DoneIcon from "@mui/icons-material/Done";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import {
   Box,
   Container,
@@ -54,28 +53,29 @@ let fullWidthStyle = {
 };
 
 const Request = () => {
-  const [request, setRequest] = useState([]);
   const [isMounted, setIsMounted] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [count, setCount] = useState("");
 
-  const { token } = useSelector((state) => state?.userReducer);
+  const { token, user } = useSelector((state) => state?.userReducer);
 
   function fetchRequests() {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    Axios.get(`/request/get-all-request`, config)
+    Axios.get(
+      `/user/all-users?page=${page}&pageSize=${rowsPerPage}&_id=${user?._id}`
+    )
       .then((res) => {
-        setRequest(res.data);
+        setUsers(res.data);
+        setCount(res?.data?.length);
         console.log(res.data, "request");
       })
       .catch((err) => console.log(err));
   }
 
   //   accept request
-  function acceptRequest(id) {
-    Axios.post(`/request/accept-user-create-request?_id=${id}`)
+  function deleteRequest(id) {
+    Axios.delete(`/user/users?_id=${id}`)
       .then((res) => {
         console.log(res.data);
         setIsMounted(true);
@@ -86,10 +86,6 @@ const Request = () => {
     fetchRequests();
   }, [isMounted]);
   // new chagnes
-
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [count, setCount] = useState("");
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -103,12 +99,12 @@ const Request = () => {
     <Box>
       <Container>
         <Box>
-          <Typography variant="h4">Request</Typography>
+          <Typography variant="h4">Users</Typography>
         </Box>
         <Box sx={{ marginBlock: "20px" }}>
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
-              {request?.length == 0 ? (
+              {users?.length == 0 ? (
                 <Grid item xs={12}>
                   <div className=" h-100 d-flex align-item-center justify-content-center">
                     Loading...
@@ -131,43 +127,25 @@ const Request = () => {
                             <TableCell>Name</TableCell>
                             <TableCell>Username</TableCell>
                             <TableCell>Email</TableCell>
-                            <TableCell>Type</TableCell>
-                            <TableCell>Status</TableCell>
-                            <TableCell>Actions</TableCell>
+                            <TableCell>Role</TableCell>
+                            <TableCell>Action(s)</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {request?.map((data, i) => {
+                          {users?.map((data, i) => {
                             return (
                               <>
                                 <TableRow key={data?._id}>
-                                  <TableCell>{data?.data?.name}</TableCell>
-                                  <TableCell>{data?.data?.username}</TableCell>
-                                  <TableCell>{data?.data?.email}</TableCell>
-                                  <TableCell>{data?.type}</TableCell>
+                                  <TableCell>{data?.name}</TableCell>
+                                  <TableCell>{data?.username}</TableCell>
+                                  <TableCell>{data?.email}</TableCell>
+                                  <TableCell>{data?.role}</TableCell>
                                   <TableCell>
-                                    <Typography
-                                      variant="body2"
-                                      color={
-                                        data?.status == "accept"
-                                          ? "green "
-                                          : data?.status == "pending"
-                                          ? "gray"
-                                          : "red"
-                                      }
-                                    >
-                                      {data?.status}
-                                    </Typography>
-                                  </TableCell>
-                                  <TableCell>
-                                    <IconButton color="error">
-                                      <CloseIcon />
-                                    </IconButton>
                                     <IconButton
-                                      color="success"
-                                      onClick={() => acceptRequest(data?._id)}
+                                      color="error"
+                                      onClick={() => deleteRequest(data?._id)}
                                     >
-                                      <DoneIcon />
+                                      <DeleteOutlineOutlinedIcon />
                                     </IconButton>
                                   </TableCell>
                                 </TableRow>

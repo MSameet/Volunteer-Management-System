@@ -40,7 +40,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "volunteer", "organizer"],
+      enum: ["admin", "volunteer"],
       default: "volunteer",
       required: true,
     },
@@ -51,9 +51,6 @@ const userSchema = new Schema(
       type: String,
       default: "0",
     },
-    type: {
-      type: String,
-    },
     qualification: {
       type: String,
     },
@@ -61,6 +58,9 @@ const userSchema = new Schema(
       type: String,
     },
     about: {
+      type: String,
+    },
+    comment: {
       type: String,
     },
     events: [{ type: Schema.Types.ObjectId, ref: "Event" }],

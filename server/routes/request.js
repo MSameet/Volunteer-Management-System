@@ -1,23 +1,16 @@
 const {
-  acceptUserCreateRequest,
-  createUserRequest,
-  rejectUserRequest,
+  userRequest,
   acceptVolunteeringRequest,
   rejectVolunteeringRequest,
   getMyRequest,
   getAllRequest,
+  getUserRequest,
 } = require("../controllers/requestController");
 
 const router = require("express").Router();
 
 // create user request
-router.route("/create-user-request").post(createUserRequest);
-
-// accept user request
-router.route("/accept-user-create-request").post(acceptUserCreateRequest);
-
-// reject user request
-router.route("/reject-user-request").patch(rejectUserRequest);
+router.route("/create-user-request").post(userRequest);
 
 // accept volunteer request
 router.route("/accept-volunteer-request").post(acceptVolunteeringRequest);
@@ -28,6 +21,9 @@ router.route("/reject-volunteer-request").post(rejectVolunteeringRequest);
 // get request
 
 router.route("/get-request").get(getMyRequest);
+
+// get user request
+router.route("/get-user-request").get(getUserRequest);
 
 // get all new request
 

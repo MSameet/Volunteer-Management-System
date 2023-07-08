@@ -5,7 +5,7 @@ import { Axios } from "../../Axios";
 import Image from "../../assets/i/page-header-bg.jpg";
 import { EventCard } from "../pages-components/EventCard";
 
-export const Events = () => {
+const Events = () => {
   const [events, setEvents] = useState([]);
   function fetchEvents() {
     Axios.get("/event/all-events")
@@ -48,7 +48,7 @@ export const Events = () => {
       <Container>
         <Box sx={{ paddingBlock: "40px" }}>
           <Grid container spacing={2}>
-            {events.length > 0 &&
+            {events.length > 0 ? (
               events?.map((event, i) => (
                 <Grid item xs={12} sm={6} lg={4} key={i}>
                   <Link to={{ pathname: `/event/${event?._id}` }} state={event}>
@@ -56,10 +56,17 @@ export const Events = () => {
                     <EventCard event={event} />
                   </Link>
                 </Grid>
-              ))}
+              ))
+            ) : (
+              <div className=" vh-100 d-flex align-item-center justify-content-center">
+                Loading...
+              </div>
+            )}
           </Grid>
         </Box>
       </Container>
     </>
   );
 };
+
+export default Events;

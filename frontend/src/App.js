@@ -2,6 +2,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 
 // swiper css
+import { Suspense } from "react";
 import { useSelector } from "react-redux";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -22,9 +23,11 @@ function App() {
   let AppRoutes = Role[user?.role] ?? DefaultRoutes;
 
   return (
-    <Router>
-      <AppRoutes />
-    </Router>
+    <Suspense fallback={<p>Loading...</p>}>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </Suspense>
   );
 }
 

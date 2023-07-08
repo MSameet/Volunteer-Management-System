@@ -39,7 +39,8 @@ const eventSchema = new Schema(
     },
     status: {
       type: String,
-      default: "inactive",
+      enum: ["inprogress", "completed"],
+      default: "inprogress",
     },
     organizer: {
       type: Schema.Types.ObjectId,

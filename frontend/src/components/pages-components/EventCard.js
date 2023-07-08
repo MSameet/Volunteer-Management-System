@@ -23,24 +23,6 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
 }));
 
 export const EventCard = ({ event }) => {
-  // const { user, token } = useSelector((state) => state?.userReducer);
-
-  // function addVolunteerIntoEvent() {
-  //   Axios.post(
-  //     "/event/add-volunteer",
-  //     {
-  //       _id: event?._id,
-  //       volunteer: user?._id,
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     }
-  //   )
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.log(err));
-  // }
   return (
     <>
       <Card sx={{ minWidth: 275 }} className="event_card">
@@ -50,7 +32,12 @@ export const EventCard = ({ event }) => {
           title="green iguana"
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="div"
+            className="text-truncate"
+          >
             {event?.title}
           </Typography>
           <Typography gutterBottom variant="caption" component="div">
@@ -59,7 +46,7 @@ export const EventCard = ({ event }) => {
           <Typography
             variant="body2"
             color="text.secondary"
-            className="event-Card_des"
+            className="event-Card_des text-truncate"
           >
             {event?.description}
           </Typography>
