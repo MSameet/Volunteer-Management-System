@@ -176,7 +176,7 @@ body {
   height: 100vh;
   display: flex;
   padding-block: 30px;
-  background-color: #fcc91b;
+  background-color: var(--primary);
 }
 .register__innercontainer {
   max-width: 450px;
@@ -213,7 +213,7 @@ body {
   text-align: center;
 }
 .form_btn_box .form_btn {
-  background-color: #fcc91b !important;
+  background-color: var(--primary) !important;
   width: 70%;
   height: 44px;
   font-size: 18px;
@@ -224,7 +224,7 @@ body {
   text-align: center;
 }
 .register__infotext a {
-  color: #fce0a2;
+  color: var(--primary);
 }
 .signup_container .register__innercontainer {
   max-width: 800px;
@@ -669,6 +669,152 @@ body {
   /* margin-bottom:  16px; */
 }
 
+/* loader */
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 0.75rem;
+}
+.loader4 {
+  position: relative;
+  color: var(--primary);
+  font-size: 50px;
+  text-indent: -9999em;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  transform: translateZ(0);
+  -webkit-animation: loader4 1.7s infinite ease, loader4Round 1.7s infinite ease;
+  animation: loader4 1.7s infinite ease, loader4Round 1.7s infinite ease;
+  overflow: hidden;
+}
+.camera_container {
+  position: relative;
+}
+.capture__btn {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+@-webkit-keyframes loader4 {
+  0% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+  5%,
+  95% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+  10%,
+  59% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em,
+      -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em,
+      -0.297em -0.775em 0 -0.477em;
+  }
+  20% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em,
+      -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em,
+      -0.749em -0.34em 0 -0.477em;
+  }
+  38% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em,
+      -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em,
+      -0.82em -0.09em 0 -0.477em;
+  }
+  100% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+}
+@keyframes loader4 {
+  0% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+  5%,
+  95% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+  10%,
+  59% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em,
+      -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em,
+      -0.297em -0.775em 0 -0.477em;
+  }
+  20% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em,
+      -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em,
+      -0.749em -0.34em 0 -0.477em;
+  }
+  38% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em,
+      -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em,
+      -0.82em -0.09em 0 -0.477em;
+  }
+  100% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+}
+@-webkit-keyframes loader4Round {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader4Round {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* .camera_container {
+  height: 650px;
+} */
+/* camera */
+.preview img {
+  position: absolute;
+  border: 5px solid #ddd;
+  z-index: 9;
+  border-radius: 10px;
+}
+#preview-canvas {
+  position: relative;
+  border: 5px solid transparent;
+  z-index: 99;
+}
+.preview {
+  position: relative;
+}
+.scanning__preview {
+  position: fixed;
+  /* height: 100vh; */
+  width: 100%;
+  left: 0px;
+  z-index: 1050;
+  overflow: hidden;
+  top: 0;
+  background-color: #0000006f;
+}
+.login__modal .css-iv51u4 {
+  height: 650px;
+}
+.volunteer__card {
+  height: 100px;
+  width: 100px !important;
+  border-radius: 50%;
+  margin: auto;
+  object-fit: cover;
+}
 @media screen and (max-width: 991px) {
   .plans {
     margin: 0 20px;

@@ -6,9 +6,10 @@ import { Admin } from "../components/pages/Admin";
 import { CreateEvent } from "../components/pages/CreateEvent";
 import EditEvent from "../components/pages/EditEvent";
 import SingleEvent from "../components/pages/SingleEvent";
-import { Volunteers } from "../components/pages/Volunteers";
+import Volunteers from "../components/pages/Volunteers";
 const EditProfile = lazy(() => import("../components/pages/EditProfile"));
 const Profile = lazy(() => import("../components/pages/Profile"));
+const Dashboard = lazy(() => import("../components/pages/Dashboard"));
 
 export const AdminRoutes = () => {
   return (
@@ -16,6 +17,7 @@ export const AdminRoutes = () => {
       <AdminToolbar />
       <Box mt={3}>
         <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/event" element={<Admin />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/edit-profile" element={<EditProfile />} />

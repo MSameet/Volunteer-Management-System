@@ -3,24 +3,25 @@ import {
   Container,
   FormHelperText,
   Grid,
-  InputLabel,
-  Stack,
   TextField,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { useFormik } from "formik";
 import React, { useState } from "react";
-import FileBase from "react-file-base64";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Axios } from "../../Axios";
 import { signup } from "../../redux/reducer/userReducer";
+import { FaceSignupModal } from "../pages-components/FaceSignupModal";
 import AlertBox from "../ui/AlertBox";
 
 export const VolunteerSignup = ({ role }) => {
   const [open, setOpen] = useState(false);
+  const [screenshot, setScreenshot] = useState(null);
+  const [dimensions, setDimensions] = useState([]);
+  const [cameraStatus, setCameraStatus] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -37,7 +38,7 @@ export const VolunteerSignup = ({ role }) => {
     country: Yup.string().required("Country is required"),
     address: Yup.string().required("Full Address is required"),
     skill: Yup.string().required("Skill is required"),
-    avatar: Yup.string().required("Avatar is required"),
+    // avatar: Yup.string().required("Avatar is required"),
     about: Yup.string().required("About is required"),
   });
 
@@ -46,6 +47,8 @@ export const VolunteerSignup = ({ role }) => {
     Axios.post(`/user/register`, {
       ...values,
       role,
+      avatar: screenshot,
+      descriptor: dimensions,
     })
       .then((res) => {
         dispatch(signup(res?.data));
@@ -74,7 +77,7 @@ export const VolunteerSignup = ({ role }) => {
       city: "",
       address: "",
       qualification: "",
-      avatar: "",
+      // avatar: "",
       password: "",
       skill: "",
       phoneNumber: "",
@@ -87,7 +90,7 @@ export const VolunteerSignup = ({ role }) => {
     <>
       <Container>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <Stack spacing={1}>
               <InputLabel htmlFor="email-login">Avatar</InputLabel>
               <div className="uploader__box">
@@ -119,6 +122,17 @@ export const VolunteerSignup = ({ role }) => {
                 </FormHelperText>
               )}
             </Stack>
+          </Grid> */}
+          <Grid item xs={12}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setCameraStatus("open");
+                setOpen("signup_face");
+              }}
+            >
+              Open Camera
+            </Button>
           </Grid>
           <Grid item md={6} xs={12}>
             <TextField
@@ -373,6 +387,19 @@ export const VolunteerSignup = ({ role }) => {
         open={open}
         severity="success"
         message="User has created successfully."
+      />
+      <FaceSignupModal
+        open={open == "signup_face"}
+        handleClose={() => {
+          setOpen(false);
+          setCameraStatus("");
+        }}
+        cameraStatus={cameraStatus}
+        setCameraStatus={setCameraStatus}
+        screenshot={screenshot}
+        setScreenshot={setScreenshot}
+        setDimensions={setDimensions}
+        dimensions={dimensions}
       />
     </>
   );

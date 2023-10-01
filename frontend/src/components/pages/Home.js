@@ -8,13 +8,17 @@ import ThreeIconBox from "../../assets/i/three_iocn_box_bg.png";
 import Banner from "../pages-components/Banner";
 import { EventCard } from "../pages-components/EventCard";
 import HomeQuotes from "../pages-components/HomeQuotes";
+import { Loader } from "../ui/Loader";
 
 const Home = () => {
   const [events, setEvents] = useState([]);
-  console.log(events);
+  const [organisers, setOrganisers] = useState([]);
   function fetchEvents() {
-    Axios.get("/event/all-events")
-      .then((res) => setEvents(res.data))
+    Axios.get("/event/get-home-data")
+      .then((res) => {
+        setEvents(res.data?.events);
+        setOrganisers(res?.data?.organisers);
+      })
       .catch((err) => console.log(err));
   }
   useEffect(() => {
@@ -183,27 +187,65 @@ const Home = () => {
               Recent Events
             </Typography>
             <Grid container spacing={2}>
-              {events.length > 0 &&
+              {events.length > 0 ? (
                 events?.map((event, i) => {
-                  if (i < 6)
-                    return (
-                      <Grid item xs={12} sm={6} lg={4} key={i}>
-                        <Link
-                          to={{ pathname: `/event/${event?._id}` }}
-                          state={event}
-                        >
-                          {" "}
-                          <EventCard event={event} />
-                        </Link>
-                      </Grid>
-                    );
-                })}
+                  return (
+                    <Grid item xs={12} sm={6} lg={4} key={i}>
+                      <Link
+                        to={{ pathname: `/event/${event?._id}` }}
+                        state={event}
+                      >
+                        {" "}
+                        <EventCard event={event} />
+                      </Link>
+                    </Grid>
+                  );
+                })
+              ) : (
+                <div className=" h-100 d-flex align-items-center justify-content-center w-100 py-5">
+                  <Loader />
+                </div>
+              )}
             </Grid>
           </Box>
         </Container>
         <section className="pt-2 mt-2 mb-5">
           <HomeQuotes />
         </section>
+        {/* <section className="pt-2 mt-2 mb-5">
+          <Container>
+            <Typography
+              variant="h3"
+              component="h3"
+              sx={{
+                textAlign: "center",
+                fontWeight: 700,
+                fontFamily: "Ubuntu, sans-serif",
+                "@media (max-width:768px)": {
+                  // fontSize: "22px",
+                },
+              }}
+              mb={5}
+            >
+              Organizations
+            </Typography>
+            <Grid container spacing={2}>
+              {organisers.length > 0 ? (
+                organisers?.map((data, i) => {
+                  return (
+                    <Grid item xs={12} sm={6} lg={4} key={i}>
+                      <Organization organizer={data} />
+                    </Grid>
+                  );
+                })
+              ) : (
+                <div className=" h-100 d-flex align-items-center justify-content-center w-100">
+                  Loading...
+                </div>
+              )}
+            </Grid>
+          </Container>
+        </section> */}
       </main>
     </>
   );

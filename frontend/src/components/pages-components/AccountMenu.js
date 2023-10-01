@@ -38,7 +38,7 @@ const AccountMenu = () => {
   };
   let AppLinks = Links[role];
   return (
-    <React.Fragment>
+    <>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         <Tooltip title="Account">
           <IconButton
@@ -165,7 +165,7 @@ const AccountMenu = () => {
           </Box>
         </MenuItem>
       </Menu>
-    </React.Fragment>
+    </>
   );
 };
 

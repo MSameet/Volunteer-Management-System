@@ -35,13 +35,15 @@ const organizerSchema = new Schema(
     avatar: {
       type: String,
     },
+    role: {
+      type: String,
+    },
     type: {
       type: String,
     },
     about: {
       type: String,
     },
-    events: [{ event: { type: Schema.Types.ObjectId, ref: "Event" } }],
     tokens: [
       {
         token: {
@@ -70,7 +72,7 @@ organizerSchema.statics.findByCardentials = async (email, password) => {
   if (!user) {
     throw new Error("Unable to login");
   }
-  const isMatch = bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     throw new Error("Unable to login");
   }

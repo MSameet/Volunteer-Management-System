@@ -12,6 +12,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
@@ -24,6 +25,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { styled } from "@mui/material/styles";
 import truncateText from "../../utils/truncateText";
+import { Loader } from "../ui/Loader";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -60,8 +62,10 @@ export const Admin = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [count, setCount] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   function fetchEvents() {
+    setIsLoading(true);
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -71,6 +75,7 @@ export const Admin = () => {
       .then((res) => {
         setEvents(res.data);
         setCount(res.data?.length);
+        setIsLoading(false);
         console.log(res.data, "events");
       })
       .catch((err) => console.log(err));
@@ -101,11 +106,20 @@ export const Admin = () => {
           <Box sx={{ marginBlock: "40px" }}>
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={2}>
-                {events?.length == 0 ? (
+                {isLoading ? (
                   <Grid item xs={12}>
                     <div className=" h-100 d-flex align-item-center justify-content-center">
-                      Loading...
+                      <Loader />
                     </div>
+                  </Grid>
+                ) : events?.length == 0 ? (
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ textAlign: "center" }}
+                    >
+                      No Event Added
+                    </Typography>
                   </Grid>
                 ) : (
                   <Grid item xs={12}>

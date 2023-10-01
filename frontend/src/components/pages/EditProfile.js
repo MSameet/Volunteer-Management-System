@@ -14,6 +14,7 @@ import { useFormik } from "formik";
 import React, { useState } from "react";
 import FileBase from "react-file-base64";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Axios } from "../../Axios";
 import AlertBox from "../ui/AlertBox";
@@ -31,6 +32,7 @@ const EditProfile = () => {
   const { user } = useSelector((state) => state?.userReducer);
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // volunteer validationSchema
   const volunteerValidationSchema = Yup.object().shape({
@@ -100,14 +102,26 @@ const EditProfile = () => {
   };
   const handleSubmit = (values) => {
     setOpen(false);
-    Axios.patch(`/user/update-user?_id=${user?._id}`, {
+    let url = "";
+    if (user?.role == "volunteer" || user?.role == "admin") {
+      url += `/user/update-user?_id=${user?._id}`;
+    }
+    if (user?.role == "organizer") {
+      url += `/organiser/edit-organiser?_id=${user?._id}`;
+    }
+    Axios.patch(url, {
       ...values,
     })
       .then((res) => {
         setOpen(true);
         console.log(res.data);
-        let interval = setTimeout(() => setOpen(false), 3000);
-        return () => clearTimeout(interval);
+        let interval = setTimeout(() => {
+          setOpen(false);
+          navigate(-1);
+        }, 3000);
+        return () => {
+          clearTimeout(interval);
+        };
       })
       .catch((err) => console.log(err));
   };

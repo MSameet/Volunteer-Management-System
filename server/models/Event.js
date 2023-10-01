@@ -44,14 +44,12 @@ const eventSchema = new Schema(
     },
     organizer: {
       type: Schema.Types.ObjectId,
+      ref: "Organizer",
+    },
+    volunteers: {
+      type: Schema.Types.ObjectId,
       ref: "User",
     },
-    volunteers: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
   },
   {
     timestamps: true,

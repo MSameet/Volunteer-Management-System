@@ -1,9 +1,10 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Axios } from "../../Axios";
+import Image from "../../assets/i/page-header-bg.jpg";
 import { VolunteerCard } from "../pages-components/VolunteerCard";
 
-export const Volunteers = () => {
+const Volunteers = () => {
   const [volunteers, setVolunteers] = useState([]);
   function fetchVolunteers() {
     Axios.get("/user/volunteers")
@@ -21,10 +22,25 @@ export const Volunteers = () => {
         <Box
           sx={{
             height: "400px",
-            backgroundImage: `url(${"/assets/i/page-header-bg.jpg"})`,
+            backgroundImage: `url(${Image})`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            mb: 5,
+            position: "relative",
           }}
         >
-          <Typography variant="h3" sx={{ textAlign: "center" }}>
+          <Typography
+            variant="h1"
+            sx={{
+              fontWeight: 800,
+              textAlign: "center",
+              color: "#fff",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
             Volunteers
           </Typography>
         </Box>
@@ -39,3 +55,5 @@ export const Volunteers = () => {
     </Container>
   );
 };
+
+export default Volunteers;

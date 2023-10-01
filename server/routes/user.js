@@ -14,6 +14,7 @@ const {
   userRegister,
   getAllUser,
   deleteUser,
+  faceRecognitionLogin,
 } = require("../controllers/userController");
 
 router.post("/register", userRegister);
@@ -33,6 +34,8 @@ router.route("/give-reward").patch(updateRating);
 router.route("/all-users").get(getAllUser);
 
 router.route("/users").delete(deleteUser);
+
+router.route("/face-recognition").post(faceRecognitionLogin);
 
 // router.get("/event/me", auth, getEventByUser);
 // router.get("/:id", auth, getUserInEvent);

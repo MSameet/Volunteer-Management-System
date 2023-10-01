@@ -9,6 +9,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import "swiper/css/virtual";
+import { Loader } from "./components/ui/Loader";
 import { AdminRoutes } from "./route/AdminRoutes";
 import { DefaultRoutes } from "./route/DefaultRoutes";
 import { SuperAdminRoutes } from "./route/SuperAdminRoutes";
@@ -23,7 +24,13 @@ function App() {
   let AppRoutes = Role[user?.role] ?? DefaultRoutes;
 
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense
+      fallback={
+        <div className="d-flex align-items-center justify-content-center vh-100 w-100">
+          <Loader />
+        </div>
+      }
+    >
       <Router>
         <AppRoutes />
       </Router>

@@ -48,6 +48,8 @@ const SingleEvent = () => {
   const [comment, setComment] = useState("");
   const navigate = useNavigate();
 
+  console.log(event, "request");
+
   const giveReward = (id) => {
     Axios.patch(`/user/give-reward?_id=${id}`, {
       rating: value,
@@ -82,24 +84,18 @@ const SingleEvent = () => {
   // apply for request
   function applyRequest() {
     if (!token) {
-      navigate("/login");
+      navigate("/signin");
     }
     setOpen(false);
     Axios.post("request/create-user-request", {
-      type: "event",
-      by: user?._id,
-      data: {
-        name: user?.name,
-        email: user?.email,
-        skill: user?.skill,
-        volunteerID: user?._id,
-        event: state?._id,
-      },
+      sender: user?._id,
+      event: state?._id,
     })
       .then((res) => {
         console.log(res.data, "apply");
         setOpen(true);
         let interval = setTimeout(() => setOpen(false), 2000);
+        navigate(-1);
         return () => {
           clearTimeout(interval);
         };
@@ -109,7 +105,7 @@ const SingleEvent = () => {
 
   // get REquest
   function getRequest() {
-    Axios.get(`request/get-request?_id=${state?._id}`)
+    Axios.get(`/request/get-request?_id=${state?._id}`)
       .then((res) => {
         console.log(res.data, "this");
         setRequest(res.data);
@@ -121,14 +117,15 @@ const SingleEvent = () => {
     if (state?.status == "completed") {
       Axios.get(`/event/single-event?_id=${state?._id}`)
         .then((res) => {
+          console.log(res.data, "117");
           setEvent(res.data);
-          setValue(res.data?.volunteers[0]?.rating);
-          setComment(res.data?.volunteers[0]?.comment);
+          setValue(res.data?.volunteers?.rating);
+          setComment(res.data?.volunteers?.comment);
         })
         .catch((err) => console.log(err));
     }
-  }, []);
-  console.log(event);
+  }, [state]);
+  console.log(state);
   useEffect(() => {
     getRequest();
   }, [isMounted]);
@@ -187,10 +184,10 @@ const SingleEvent = () => {
             {!(user?.role == "organizer" || user?.role == "admin") && (
               <Button
                 variant="contained"
-                disabled={
-                  state?.volunteers.length > 0 &&
-                  state?.volunteers.includes(user?._id)
-                }
+                disabled={request?.some(
+                  (req) =>
+                    req.event == state?._id && req.sender?._id == user?._id
+                )}
                 onClick={applyRequest}
               >
                 Apply
@@ -212,7 +209,7 @@ const SingleEvent = () => {
             <Grid item md={6} xs={12}>
               <Typography variant="subtitle2">Host Entity</Typography>
               <Typography variant="caption">
-                {state?.organizer?.name}
+                {state?.organizer?.name || "UNV"}
               </Typography>
             </Grid>
             <Grid item md={6} xs={12}>
@@ -284,9 +281,9 @@ const SingleEvent = () => {
                       return (
                         <>
                           <TableRow key={data?._id}>
-                            <TableCell>{data?.data?.name}</TableCell>
-                            <TableCell>{data?.data?.email}</TableCell>
-                            <TableCell>{data?.data?.skill}</TableCell>
+                            <TableCell>{data?.sender?.name}</TableCell>
+                            <TableCell>{data?.sender?.email}</TableCell>
+                            <TableCell>{data?.sender?.skill}</TableCell>
                             <TableCell>
                               <Typography
                                 variant="body2"
@@ -310,6 +307,7 @@ const SingleEvent = () => {
                               </IconButton>
                               <IconButton
                                 color="success"
+                                disabled={data?.status == "accept"}
                                 onClick={() => acceptRequest(data?._id)}
                               >
                                 <DoneIcon />
@@ -331,81 +329,79 @@ const SingleEvent = () => {
               <Typography variant="h4" mb={3}>
                 Volunteer(s)
               </Typography>
-              {event?.volunteers?.map((volunteer) => (
-                <>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "20px",
-                        }}
-                      >
-                        <Avatar
-                          alt="Remy Sharp"
-                          src={volunteer?.avatar}
-                          sx={{ width: 82, height: 82 }}
-                        />
-                        <Box>
-                          <Typography variant="h5">
-                            {volunteer?.name}
-                          </Typography>
-                          <Box
+              <>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "20px",
+                      }}
+                    >
+                      <Avatar
+                        alt="Remy Sharp"
+                        src={event?.volunteers?.avatar}
+                        sx={{ width: 82, height: 82 }}
+                      />
+                      <Box>
+                        <Typography variant="h5">
+                          {event?.volunteers?.name}
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "20px",
+                          }}
+                          mt={1}
+                        >
+                          <Typography
+                            variant="overline"
                             sx={{
                               display: "flex",
                               alignItems: "center",
-                              gap: "20px",
+                              gap: "10px",
                             }}
-                            mt={1}
                           >
-                            <Typography
-                              variant="overline"
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "10px",
-                              }}
-                            >
-                              {volunteer?.email}
-                            </Typography>
-                          </Box>
+                            {event?.volunteers?.email}
+                          </Typography>
                         </Box>
                       </Box>
                     </Box>
                   </Box>
-                  <Box my={2}>
-                    <Rating
-                      name="simple-controlled"
-                      value={value}
-                      onChange={(event, newValue) => {
-                        setValue(newValue);
-                      }}
-                    />
-                  </Box>
-                  <TextField
-                    multiline
-                    rows={3}
-                    fullWidth
-                    label="Comment"
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
+                </Box>
+                <Box my={2}>
+                  <Rating
+                    name="simple-controlled"
+                    value={value}
+                    onChange={(event, newValue) => {
+                      setValue(newValue);
+                    }}
                   />
-                  <Button
-                    variant="contained"
-                    sx={{ mt: 2 }}
-                    onClick={() => giveReward(volunteer?._id)}
-                  >
-                    Post
-                  </Button>
-                </>
-              ))}
+                </Box>
+                <TextField
+                  multiline
+                  rows={3}
+                  fullWidth
+                  label="Comment"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                />
+                <Button
+                  variant="contained"
+                  sx={{ mt: 2 }}
+                  onClick={() => giveReward(event?.volunteers?._id)}
+                >
+                  Post
+                </Button>
+              </>
             </Item>
           )}
       </Container>

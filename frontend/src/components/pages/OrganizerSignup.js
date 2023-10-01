@@ -40,7 +40,8 @@ export const OrganizerSignup = ({ role }) => {
   });
 
   const handleSubmit = (values) => {
-    Axios.post(`/organizer/create-organizer`, {
+    console.log(values);
+    Axios.post(`/organiser/create-organiser`, {
       ...values,
       role,
     })
@@ -51,7 +52,7 @@ export const OrganizerSignup = ({ role }) => {
         let interval = setTimeout(() => setOpen(false), 3000);
         return () => {
           clearTimeout(interval);
-          navigate("/event");
+          navigate("/dashboard");
         };
       })
       .catch((err) => console.log(err));

@@ -1,4 +1,5 @@
 const Event = require("../models/Event");
+const Organizer = require("../models/Organizer");
 const User = require("../models/User");
 const sharp = require("sharp");
 
@@ -22,7 +23,11 @@ const getEvents = async (req, res) => {
 const singleEvent = async (req, res) => {
   try {
     const { _id } = req.query;
-    const event = await Event.findById(_id).populate("volunteers");
+    const event = await Event.findById(_id)
+      .populate({
+        path: "volunteers",
+      })
+      .populate("organizer");
     res.status(200).send(event);
   } catch (error) {
     res.status(403).send(error);
@@ -63,11 +68,13 @@ const deleteEvent = async (req, res) => {
 
 const getAllEvents = async (req, res) => {
   try {
-    const Events = await Event.find({})
+    const { pageSize } = req.query;
+    const Events = await Event.find({ status: "inprogress" })
       .populate("organizer")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .limit(pageSize);
 
-    res.send(Events).status(200);
+    res.send(Events).status(201);
   } catch (error) {
     res.send().status(404);
   }
@@ -116,6 +123,81 @@ const updateEventStatus = async (req, res) => {
   }
 };
 
+// get home data
+
+const getHomeEvent = async (req, res) => {
+  try {
+    const events = await Event.find({ status: "inprogress" }).limit(6);
+    const organisers = await Organizer.find({}).limit(6);
+
+    res.status(201).send({ events, organisers });
+  } catch (error) {
+    res.status(404).send(error);
+  }
+};
+
+// yearly event
+const findEventsByOrganizerAndYear = async (req, res) => {
+  try {
+    const year = 2023;
+    const events = db.events.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: new Date(year, 0, 1), // Start of the year
+            $lt: new Date(year + 1, 0, 1), // Start of the next year
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: "$createdAt" }, // Grouping by month
+          eventCount: { $sum: 1 }, // Counting the number of events in each month
+        },
+      },
+      {
+        $sort: {
+          _id: 1, // Sort the result by month in ascending order
+        },
+      },
+    ]);
+
+    res.send(events);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+};
+
+// getAllData
+
+const getAllData = async (req, res) => {
+  try {
+    const events = await Event.find({}).count();
+    const activeEvents = await Event.find({ status: "inprogress" }).count();
+    const volunteer = await User.find({ role: "volunteer" }).count();
+
+    res.status(200).send({ events, activeEvents, volunteer });
+  } catch (error) {
+    res.status(404).send(error);
+  }
+};
+
+// getVolunteerEvents
+
+const getVolunteerEvents = async (req, res) => {
+  try {
+    const { page, pageSize } = req.query;
+
+    const events = await Event.find({ volunteers: req?.user?._id })
+      .limit(pageSize)
+      .skip(page);
+
+    res.status(200).send(events);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+};
+
 module.exports = {
   addEvent,
   getEvents,
@@ -126,4 +208,8 @@ module.exports = {
   getRecentEvents,
   updateEventStatus,
   singleEvent,
+  getHomeEvent,
+  findEventsByOrganizerAndYear,
+  getAllData,
+  getVolunteerEvents,
 };

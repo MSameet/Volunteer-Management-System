@@ -10,6 +10,6 @@ router.use("/event", eventRouter);
 
 router.use("/request", requestRouter);
 
-router.use("/organizer", organizerRouter);
+router.use("/organiser", organizerRouter);
 
 module.exports = router;

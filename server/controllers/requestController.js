@@ -19,23 +19,19 @@ const acceptVolunteeringRequest = async (req, res) => {
   try {
     const { _id } = req.query;
     const updateRequest = await Request.findByIdAndUpdate(
-      { _id },
+      _id,
       { $set: { status: "accept" } },
       { new: true }
     );
     const event = await Event.findByIdAndUpdate(
-      { _id: updateRequest?.data?.event },
+      { _id: updateRequest?.event },
       {
-        $set: { volunteers: updateRequest?.data?.volunteerID },
+        $set: { volunteers: updateRequest?.sender },
       },
       { new: true }
     );
-    const volunteer = await User.findByIdAndUpdate(
-      { _id: updateRequest?.data?.volunteerID },
-      { $set: { events: updateRequest?.data?.event } },
-      { new: true, upsert: true }
-    );
-    res.status(201).send({ event, volunteer });
+
+    res.status(201).send({ updateRequest });
   } catch (error) {
     res.status(404).send(error);
   }
@@ -60,7 +56,7 @@ const rejectVolunteeringRequest = async (req, res) => {
 const getMyRequest = async (req, res) => {
   try {
     const { _id } = req.query;
-    const request = await Request.find({ "data.event": _id });
+    const request = await Request.find({ event: _id }).populate("sender");
 
     res.status(201).send(request);
   } catch (error) {
@@ -71,7 +67,10 @@ const getMyRequest = async (req, res) => {
 async function getUserRequest(req, res) {
   try {
     const { _id, page, pageSize } = req.query;
-    const request = await Request.find({ by: _id }).limit(pageSize).skip(page);
+    const request = await Request.find({ sender: _id })
+      .populate("event")
+      .limit(pageSize)
+      .skip(page);
     res.status(200).send(request);
   } catch (error) {
     res.status(400).send(error);

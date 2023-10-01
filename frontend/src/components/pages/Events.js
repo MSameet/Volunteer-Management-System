@@ -1,20 +1,27 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Axios } from "../../Axios";
 import Image from "../../assets/i/page-header-bg.jpg";
 import { EventCard } from "../pages-components/EventCard";
+import { Loader } from "../ui/Loader";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
   function fetchEvents() {
-    Axios.get("/event/all-events")
-      .then((res) => setEvents(res.data))
+    setIsLoading(true);
+    Axios.get(`/event/all-events?pageSize=${pageSize}`)
+      .then((res) => {
+        setEvents(res.data);
+        setIsLoading(false);
+      })
       .catch((err) => console.log(err));
   }
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [pageSize]);
   return (
     <>
       <Box
@@ -48,7 +55,11 @@ const Events = () => {
       <Container>
         <Box sx={{ paddingBlock: "40px" }}>
           <Grid container spacing={2}>
-            {events.length > 0 ? (
+            {isLoading ? (
+              <div className=" h-100 d-flex align-items-center justify-content-center w-100 my-5 py-5">
+                <Loader />
+              </div>
+            ) : events.length > 0 ? (
               events?.map((event, i) => (
                 <Grid item xs={12} sm={6} lg={4} key={i}>
                   <Link to={{ pathname: `/event/${event?._id}` }} state={event}>
@@ -58,11 +69,20 @@ const Events = () => {
                 </Grid>
               ))
             ) : (
-              <div className=" vh-100 d-flex align-item-center justify-content-center">
-                Loading...
-              </div>
+              <Typography variant="body2" sx={{ textAlign: "center" }}>
+                No Event Added
+              </Typography>
             )}
           </Grid>
+          <Box sx={{ textAlign: "center", mt: 4 }}>
+            <Button
+              variant="outlined"
+              disabled={isLoading}
+              onClick={() => setPageSize((prev) => prev + 5)}
+            >
+              Load More
+            </Button>
+          </Box>
         </Box>
       </Container>
     </>

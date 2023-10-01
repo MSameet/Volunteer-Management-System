@@ -47,6 +47,8 @@ const userSchema = new Schema(
     avatar: {
       type: String,
     },
+    init_vector: { type: String },
+    face_descriptor: { type: String },
     rating: {
       type: String,
       default: "0",
@@ -63,7 +65,6 @@ const userSchema = new Schema(
     comment: {
       type: String,
     },
-    events: [{ type: Schema.Types.ObjectId, ref: "Event" }],
     tokens: [
       {
         token: {
@@ -92,7 +93,7 @@ userSchema.statics.findByCardentials = async (email, password) => {
   if (!user) {
     throw new Error("Unable to login");
   }
-  const isMatch = bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     throw new Error("Unable to login");
   }

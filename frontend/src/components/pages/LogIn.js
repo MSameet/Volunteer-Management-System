@@ -1,7 +1,7 @@
 import { Button, Grid, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Axios } from "../../Axios";
 import volunteers from "../../assets/i/user-male.png";
 import { login } from "../../redux/reducer/userReducer";
@@ -31,12 +31,6 @@ const LogIn = () => {
     )
       .then((res) => {
         dispatch(login(res.data));
-        if (res?.data?.user?.role == "volunteer") {
-          navigate("/");
-        }
-        if (res?.data?.user?.role == "organizer") {
-          navigate("/event");
-        }
         if (res?.data?.user?.role == "admin") {
           navigate("/admin");
         }
@@ -73,9 +67,6 @@ const LogIn = () => {
                 Login
               </Button>
             </div>
-            <p className="register__infotext">
-              Don't have an account. <Link to="/signup">Signup</Link>
-            </p>
           </form>
         </Grid>
       </Grid>

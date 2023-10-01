@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 // new
 import { styled } from "@mui/material/styles";
 import { Axios } from "../../Axios";
+import truncateText from "../../utils/truncateText";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -52,16 +53,15 @@ let fullWidthStyle = {
 
 const VolunteerRequest = () => {
   const [request, setRequest] = useState([]);
-  const [isMounted, setIsMounted] = useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [count, setCount] = useState("");
 
-  const { token, user } = useSelector((state) => state?.userReducer);
+  const { user } = useSelector((state) => state?.userReducer);
 
   function fetchRequests() {
     Axios.get(
-      `/request/get-user-request?_by=${user?._id}&page=${page}&pageSize=${rowsPerPage}`
+      `/request/get-user-request?_id=${user?._id}&page=${page}&pageSize=${rowsPerPage}`
     )
       .then((res) => {
         setRequest(res.data);
@@ -95,9 +95,10 @@ const VolunteerRequest = () => {
             <Grid container spacing={2}>
               {request?.length == 0 ? (
                 <Grid item xs={12}>
-                  <div className=" h-100 d-flex align-item-center justify-content-center">
-                    Loading...
-                  </div>
+                  {/* <div className=" h-100 d-flex align-item-center justify-content-center py-5">
+                    <Loader />
+                  </div> */}
+                  <h2>No Result Found.</h2>
                 </Grid>
               ) : (
                 <Grid item xs={12}>
@@ -113,10 +114,10 @@ const VolunteerRequest = () => {
                       >
                         <TableHead>
                           <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Email</TableCell>
-                            <TableCell>Skill(s)</TableCell>
-                            <TableCell>Type</TableCell>
+                            <TableCell>Event's Title</TableCell>
+                            <TableCell>Event's Duration</TableCell>
+                            <TableCell>Event's City</TableCell>
+                            <TableCell>Event's Type</TableCell>
                             <TableCell>Status</TableCell>
                           </TableRow>
                         </TableHead>
@@ -125,10 +126,12 @@ const VolunteerRequest = () => {
                             return (
                               <>
                                 <TableRow key={data?._id}>
-                                  <TableCell>{data?.data?.name}</TableCell>
-                                  <TableCell>{data?.data?.email}</TableCell>
-                                  <TableCell>{data?.data?.skill}</TableCell>
-                                  <TableCell>{data?.type}</TableCell>
+                                  <TableCell>
+                                    {truncateText(data?.event?.title, 15)}
+                                  </TableCell>
+                                  <TableCell>{data?.event?.duration}</TableCell>
+                                  <TableCell>{data?.event?.city}</TableCell>
+                                  <TableCell>{data?.event?.type}</TableCell>
                                   <TableCell>
                                     <Typography
                                       variant="body2"

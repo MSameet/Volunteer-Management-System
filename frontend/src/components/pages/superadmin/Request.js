@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 // new
 import { styled } from "@mui/material/styles";
 import { Axios } from "../../../Axios";
+import { Loader } from "../../ui/Loader";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -106,8 +107,8 @@ const Request = () => {
             <Grid container spacing={2}>
               {users?.length == 0 ? (
                 <Grid item xs={12}>
-                  <div className=" h-100 d-flex align-item-center justify-content-center">
-                    Loading...
+                  <div className=" h-100 d-flex align-item-center justify-content-center py-5">
+                    <Loader />
                   </div>
                 </Grid>
               ) : (

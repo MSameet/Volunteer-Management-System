@@ -24,7 +24,7 @@ const Navbar = () => {
     );
   }, [active]);
   return (
-    <AppBar position={"static"} className="header">
+    <AppBar position={"relative"} className="header">
       <Container fixed className="header_container" height="100%">
         <div className="header__inner-container">
           <Link to="/" className="logo">
@@ -47,35 +47,13 @@ const Navbar = () => {
                 Events
               </Link>
             </li>
-            {/* <li className="nav_items">
-              <Link
-                to="/volunteer"
-                className={`nav_link ${
-                  pathname == "/volunteer" ? "active" : ""
-                }`}
-              >
-                Volunteers
-              </Link>
-            </li> */}
-            {user && user.role == "volunteer" && (
-              <li className="nav_items">
-                <Link
-                  to="/profile"
-                  className={`nav_link ${
-                    pathname == "/profile" ? "active" : ""
-                  }`}
-                >
-                  Profile
-                </Link>
-              </li>
-            )}
           </ul>
           <div className="header__logoinbtn">
             {user?.role == "volunteer" ? (
               <AccountMenu />
             ) : (
-              <Button variant="outlined" href="/login">
-                Login
+              <Button variant="outlined" href="/signin">
+                Signin
               </Button>
             )}
           </div>
