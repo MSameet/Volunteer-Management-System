@@ -1,4 +1,5 @@
-import { Box, Modal } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { Box, Button, Modal } from "@mui/material";
 import React from "react";
 import { Camera } from "./Camera";
 
@@ -32,6 +33,11 @@ export const FaceSignupModal = ({
       className="login__modal"
     >
       <Box sx={style}>
+        <div className="d-flex align-items-center justify-content-end">
+          <Button variant="link" onClick={handleClose}>
+            <CloseIcon fontSize="medium" />
+          </Button>
+        </div>
         <Camera
           screenshot={screenshot}
           setScreenshot={setScreenshot}

@@ -9,7 +9,7 @@ const path = require("path");
 const port = process.env.PORT || 2000;
 
 let corsOptions = {
-  origin: "http://localhost:3002",
+  origin: "http://localhost:3000",
 };
 
 app.use(cors(corsOptions));

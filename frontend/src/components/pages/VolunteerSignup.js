@@ -129,9 +129,10 @@ export const VolunteerSignup = ({ role }) => {
               onClick={() => {
                 setCameraStatus("open");
                 setOpen("signup_face");
+                setScreenshot(null);
               }}
             >
-              Open Camera
+              {screenshot != null ? "Retake Image" : "Open Camera"}
             </Button>
           </Grid>
           <Grid item md={6} xs={12}>
